@@ -73,6 +73,7 @@ class AsyncTransport:
         method: str,
         params: Dict[str, Any],
         request_id: Optional[str] = None,
+        database: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Make an async JSON-RPC call to the Odoo server.
 
@@ -81,6 +82,7 @@ class AsyncTransport:
             method: The method to call (e.g., "version", "execute_kw")
             params: Parameters to pass to the method
             request_id: Optional request ID for tracking
+            database: Optional database name to include in X-Odoo-Database header
 
         Returns:
             The JSON-RPC response data
@@ -106,9 +108,14 @@ class AsyncTransport:
             "id": request_id,
         }
 
+        # Prepare headers, include X-Odoo-Database if database is specified
+        headers = {}
+        if database:
+            headers["X-Odoo-Database"] = database
+
         try:
-            # Make the HTTP request
-            response = await self._client.post("/jsonrpc", json=payload)
+            # Make the HTTP request (with database header for Odoo 19+)
+            response = await self._client.post("/jsonrpc", json=payload, headers=headers)
             response.raise_for_status()
 
             # Parse JSON response

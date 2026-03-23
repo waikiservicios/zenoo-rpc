@@ -262,8 +262,10 @@ class ZenooClient:
             else:
                 params["args"].append({"context": call_context})
 
-        # Make the RPC call
-        result = await self._transport.json_rpc_call("object", "execute_kw", params)
+        # Make the RPC call (with database header for Odoo 19+)
+        result = await self._transport.json_rpc_call(
+            "object", "execute_kw", params, database=self._session.database
+        )
         return result.get("result")
 
     async def execute(

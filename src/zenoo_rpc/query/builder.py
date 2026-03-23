@@ -5,11 +5,12 @@ This module provides a chainable, type-safe query interface for building
 and executing Odoo queries with performance optimization and lazy loading.
 """
 
+from __future__ import annotations
+
 import asyncio
 import hashlib
 import json
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union, AsyncIterator
-from collections.abc import AsyncIterable
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union, AsyncIterator, AsyncIterable
 
 from ..models.base import OdooModel
 from ..models.registry import get_model_class, get_registry

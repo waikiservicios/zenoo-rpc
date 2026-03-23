@@ -93,13 +93,17 @@ class SessionManager:
             AuthenticationError: If authentication fails
         """
         try:
-            # First, get server version info
-            version_result = await transport.json_rpc_call("common", "version", {})
+            # First, get server version info (with database header for Odoo 19+)
+            version_result = await transport.json_rpc_call(
+                "common", "version", {}, database=database
+            )
             self._server_version = version_result.get("result", {})
 
-            # Authenticate user
+            # Authenticate user (with database header for Odoo 19+)
             auth_result = await transport.json_rpc_call(
-                "common", "authenticate", {"args": [database, username, password, {}]}
+                "common", "authenticate",
+                {"args": [database, username, password, {}]},
+                database=database
             )
 
             uid = auth_result.get("result")
@@ -143,14 +147,18 @@ class SessionManager:
         # Note: API key authentication might require different implementation
         # depending on Odoo version and configuration
         try:
-            # Get server version info
-            version_result = await transport.json_rpc_call("common", "version", {})
+            # Get server version info (with database header for Odoo 19+)
+            version_result = await transport.json_rpc_call(
+                "common", "version", {}, database=database
+            )
             self._server_version = version_result.get("result", {})
 
             # For API key authentication, we might need to use a different approach
-            # This is a placeholder implementation
+            # This is a placeholder implementation (with database header for Odoo 19+)
             auth_result = await transport.json_rpc_call(
-                "common", "authenticate", {"args": [database, username, api_key, {}]}
+                "common", "authenticate",
+                {"args": [database, username, api_key, {}]},
+                database=database
             )
 
             uid = auth_result.get("result")

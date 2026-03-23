@@ -5,9 +5,10 @@ This module provides lazy loading capabilities for efficient data fetching,
 including lazy collections and deferred loading strategies.
 """
 
+from __future__ import annotations
+
 import asyncio
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union, AsyncIterator
-from collections.abc import AsyncIterable
+from typing import Any, Dict, List, Optional, Type, TypeVar, Union, AsyncIterator, AsyncIterable
 from weakref import WeakKeyDictionary
 
 T = TypeVar("T")

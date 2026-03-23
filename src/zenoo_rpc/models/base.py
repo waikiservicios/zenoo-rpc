@@ -5,7 +5,9 @@ This module provides the foundation for type-safe Odoo record handling
 using Pydantic models with ORM-like capabilities.
 """
 
-from typing import Any, Dict, List, Optional, Type, TypeVar, Union, ClassVar
+from __future__ import annotations
+
+from typing import Any, Dict, List, Optional, Set, Type, TypeVar, Union, ClassVar
 from datetime import date, datetime
 from pydantic import BaseModel, Field, ConfigDict, model_validator, field_validator
 from pydantic.fields import FieldInfo
@@ -126,7 +128,7 @@ class OdooModel(BaseModel, metaclass=OdooModelMeta):
     # Model metadata (excluded from serialization)
     odoo_name: ClassVar[str] = ""
     client: Optional[Any] = Field(default=None, exclude=True, repr=False)
-    loaded_fields: set[str] = Field(default_factory=set, exclude=True, repr=False)
+    loaded_fields: Set[str] = Field(default_factory=set, exclude=True, repr=False)
     relationship_manager: Optional[RelationshipManager] = Field(
         default=None, exclude=True, repr=False
     )
@@ -267,7 +269,7 @@ class OdooModel(BaseModel, metaclass=OdooModelMeta):
         """
         return field_name in self.loaded_fields
 
-    def get_loaded_fields(self) -> set[str]:
+    def get_loaded_fields(self) -> Set[str]:
         """Get the set of fields that have been loaded.
 
         Returns:
